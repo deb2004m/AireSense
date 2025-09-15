@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Contact Me</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    {% include "navbar.html" %}
+    <div class="container">
+      <h1>Contact Me</h1>
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div class="alert {{ category }}">{{ message }}</div>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <form method="POST">
+        <label>Your Name:</label>
+        <input type="text" name="name" required />
+
+        <label>Your Email:</label>
+        <input type="email" name="email" required />
+
+        <label>Your Message:</label>
+        <textarea name="message" required></textarea>
+
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </body>
+</html>

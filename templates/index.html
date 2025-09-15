@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AQI Prediction</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <!-- {% include "navbar.html" %} -->
+     <!--header-->
+      <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">
+                    <i data-lucide="wind"></i>
+                    AirSense
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#predictor">Predictor</a></li>
+                    <li><a href="{{ url_for('manual') }}">Manual Input</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+        <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Hero Section -->
+            <section id="home" class="hero-section">
+                <h1 class="hero-title">Air Quality Intelligence</h1>
+                <p class="hero-subtitle">
+                    Advanced ML-powered predictions for real-time air pollution insights. 
+                    Make informed decisions about your health and environment.
+                </p>
+            </section>
+            <!-- Prediction section -->
+
+    <section id="predictor" class="prediction-card">
+        <div class="card-header">
+          <h2 class="card-tittle">Air Quality Index Engine</h2>
+          <p class="card-subtitle">Select your location to get instant air quality predictions</p>
+        </div>
+        <form method="POST">
+          <div class="form-group">
+              <label for="location-select" class="form-label"> Select Station </label>
+              <select name="station" id="location-select" class="form-select" required >
+                <option value="" disabled selected>-- Choose a station --</option>
+                {% for s in areas %}
+                <option value="{{ s }}"  {% if request.form.get('station') == s %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+          </select>
+          </div>
+          <button type="submit" class="predict-btn">
+            <span class="btn-text">🔍Predict AQI</span>
+            <span class="loading hidden"></span>
+            
+          </button>
+        </form>
+      
+      <!-- result-section -->
+        <!-- {% if aqi %}
+        <section id="result" class="results-card show" style="border-left: 6px solid {{ color }};">
+            <h3 style="color: {{ color }}">AQI: {{ aqi }}</h3>
+            <p>Catagory: <strong> {{ category }}</strong></p>
+           -->
+          
+            <!-- <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                        <div style="text-align: center; padding: 1.5rem; background: rgba(79, 70, 229, 0.1); border-radius: 12px;">
+                            <i data-lucide="thermometer" style="width: 2rem; height: 2rem; color: #4f46e5; margin-bottom: 0.5rem;"></i>
+                            <div style="font-weight: 600; color: #1f2937;">Temperature</div>
+                            <div id="temperature" style="color: #6b7280;">--°C</div>
+                        </div>
+                        <div style="text-align: center; padding: 1.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 12px;">
+                            <i data-lucide="droplets" style="width: 2rem; height: 2rem; color: #10b981; margin-bottom: 0.5rem;"></i>
+                            <div style="font-weight: 600; color: #1f2937;">Humidity</div>
+                            <div id="humidity" style="color: #6b7280;">--%</div>
+                        </div>
+                        <div style="text-align: center; padding: 1.5rem; background: rgba(245, 158, 11, 0.1); border-radius: 12px;">
+                            <i data-lucide="wind" style="width: 2rem; height: 2rem; color: #f59e0b; margin-bottom: 0.5rem;"></i>
+                            <div style="font-weight: 600; color: #1f2937;">Wind Speed</div>
+                            <div id="windspeed" style="color: #6b7280;">-- km/h</div>
+                        </div>
+                    </div>-->
+            </section> 
+
+            {% if prediction %}
+            
+            <section id="result" class="results-card show">
+                <!-- <div id="aqi-value" class="aqi-value"> -->
+                <h3>Predicted AQI: <span>{{ prediction }}</span></h3>
+                <p class="card-title">AQI predicted the selected station</p>
+                <!-- <div id="aqi-label" class="aqi-label">Air Quality Index</div> -->
+                <!-- <div id="aqi-description" class="aqi-description">
+                <h4 style="margin-bottom: 1rem;">Health Advisory</h4>
+                <p id="aqi-advice">Select a location to get your air quality prediction.</p>
+                </div>
+            </div> -->
+            <!-- your three info tiles below ... -->
+        </section>
+        {% endif %}
+
+
+        <!-- {% endif %} -->
+      </div>
+                 <!-- Info Cards -->
+            <section class="info-grid">
+                <div id="about" class="info-card">
+                    <div class="info-card-header">
+                        <div class="info-card-icon">
+                            <i data-lucide="target"></i>
+                        </div>
+                        <h3 class="info-card-title">Our Mission</h3>
+                    </div>
+                    <div class="info-card-content">
+                        We provide accurate, real-time air quality predictions using advanced machine learning models. 
+                        Our platform helps communities make informed decisions about their health and outdoor activities 
+                        by delivering precise environmental insights.
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <div class="info-card-icon">
+                            <i data-lucide="brain"></i>
+                        </div>
+                        <h3 class="info-card-title">AI-Powered Analytics</h3>
+                    </div>
+                    <div class="info-card-content">
+                        Our sophisticated algorithms analyze multiple environmental factors including temperature, 
+                        humidity, wind patterns, and historical data to provide highly accurate air quality forecasts 
+                        tailored to your specific location.
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <div class="info-card-icon">
+                            <i data-lucide="shield-check"></i>
+                        </div>
+                        <h3 class="info-card-title">Health Protection</h3>
+                    </div>
+                    <div class="info-card-content">
+                        Get personalized health recommendations based on current air quality conditions. 
+                        Our system provides actionable insights to help you protect yourself and your family 
+                        form harmful air pollution exposure.
+                    </div>
+                </div>
+            </section>
+      <!-- Contact - Section -->
+
+<section id="contact" class="contact-section">
+                <div class="card-header">
+                    <h2 class="card-title">Get In Touch</h2>
+                    <p class="card-subtitle">Have questions? We'd love to hear form you</p>
+                </div>
+
+                <form class="contact-form" onsubmit="sendMessage(event)">
+                    <input type="text" class="form-input" placeholder="Your Name" required>
+                    <input type="email" class="form-input" placeholder="Your Email" required>
+                    <textarea class="form-input form-textarea" placeholder="Your Message" required></textarea>
+                    <button type="submit" class="submit-btn">
+                        <span>Send Message</span>
+                        <i data-lucide="send"></i>
+                    </button>
+                </form>
+            </section>
+    </section>
+        <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-brand">
+                        <i data-lucide="wind"></i>
+                        AirSense
+                    </div>
+                    <p class="footer-description">
+                        Leading the future of environmental intelligence with AI-powered air quality predictions. 
+                        Empowering communities to make informed health decisions.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i data-lucide="facebook"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i data-lucide="twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i data-lucide="linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i data-lucide="instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#predictor">AQI Predictor</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">API Documentation</a></li>
+                        <li><a href="#">Health Guidelines</a></li>
+                        <li><a href="#">Data Sources</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 AirSense. All rights reserved. Built with ❤️ for cleaner air.</p>
+            </div>
+        </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Model Accuracy Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../static/dashboardStyle.css" />
+  </head>
+  <body>
+    <h1>📊 Model Accuracy Dashboard</h1>
+
+    <h3>Metrics:</h3>
+    <ul>
+      <li>R² Score: {{ metrics['r2'] | round(3) }}</li>
+      <li>MAE: {{ metrics['mae'] | round(2) }}</li>
+      <li>MSE: {{ metrics['mse'] | round(2) }}</li>
+    </ul>
+
+    <h3>Actual vs Predicted AQI</h3>
+    <canvas id="lineChart" width="800" height="400"></canvas>
+
+    <script>
+      const ctx = document.getElementById('lineChart').getContext('2d');
+      const actual = {{ actual | tojson }};
+      const predicted = {{ predicted | tojson }};
+      const labels = Array.from({length: actual.length}, (_, i) => i + 1);
+
+      new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: labels,
+              datasets: [{
+                  label: 'Actual AQI',
+                  data: actual,
+                  borderColor: 'green',
+                  fill: false
+              }, {
+                  label: 'Predicted AQI',
+                  data: predicted,
+                  borderColor: 'blue',
+                  fill: false
+              }]
+          }
+      });
+    </script>
+  </body>
+</html>
