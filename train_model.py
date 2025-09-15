@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 # Load dataset
-df = pd.read_csv("AirQualityUCI.csv")
+df = pd.read_csv("Dataset/Dataset.csv")
 
 # Remove rows with missing pollutant values
 df = df[df['pollutant_avg'].notna()]
@@ -56,7 +56,7 @@ print(f"R²: {r2:.2f}")
 with open("aqi_model.pkl", "wb") as f:
     pickle.dump(model, f)
 
-filtered_df.to_csv("area_pollution_data.csv", index=False)
+filtered_df.to_csv("Dataset/area_pollution_data.csv", index=False)
 
 print("✅ Model trained and saved as aqi_model.pkl")
 

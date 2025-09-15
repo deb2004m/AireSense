@@ -5,7 +5,7 @@ import smtplib
 
 # ---- Load model and dataset ----
 model = pickle.load(open("aqi_model.pkl", "rb"))
-data = pd.read_csv("area_pollution_data.csv")
+data = pd.read_csv("Dataset/area_pollution_data.csv")
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"   # needed for flash messages
@@ -13,15 +13,6 @@ app.secret_key = "your_secret_key"   # needed for flash messages
 # Keep this consistent with how you trained the model
 features_columns = ['PM2.5', 'PM10', 'NO2', 'CO', 'OZONE']
 
-def get_aqi_category(aqi):
-    if aqi <= 50:
-        return "Good", "green"
-    elif aqi <= 100:
-        return "Moderate", "yellow"
-    elif aqi <= 200:
-        return "Poor", "orange"
-    else:
-        return "Hazardous", "red"
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -61,16 +52,28 @@ def manual():
             pm25 = float(request.form["pm25"])
             pm10 = float(request.form["pm10"])
             no2  = float(request.form["no2"])
-            so2  = float(request.form["so2"])
             co   = float(request.form["co"])
             o3   = float(request.form["o3"])
 
-            features = [[pm25, pm10, no2, so2, co, o3]]
+            features = [[pm25, pm10, no2, co, o3]]
             prediction = round(float(model.predict(features)[0]), 2)
-            category, color = get_aqi_category(prediction)
             
+             # Add back category classification
+            if prediction <= 50:
+                category, color = "Good", "green"
+            elif prediction <= 100:
+                category, color = "Moderate", "yellow"
+            elif prediction <= 200:
+                category, color = "Poor", "orange"
+            else:
+                category, color = "Hazardous", "red"
+
         except Exception as e:
-            flash(f"Error: {e}", "danger")
+            prediction = None
+            category = "Error"
+            color = "red"
+            print("Prediction error:", e)  # logs error in console
+
     return render_template("manual.html", prediction=prediction, category=category, color=color)
 
 @app.route("/about")
